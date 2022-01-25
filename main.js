@@ -1,8 +1,38 @@
-let donacion = prompt("Dejanos tu donación:", "El minimo a donar es de $50 y el máximo es de $10.000")
-while ((donacion > 10000) || (donacion < 50)){
-    alert ("Ingresaste un monto inválido, recordá que tiene que ser al menos $50 y no más de $10.000")
-    donacion = prompt("Dejanos tu donación", "El minimo a donar es de $50 y el máximo es de $10.000")
+let montoTotal =parseFloat(prompt("Indica el monto de tu compra"));
+while(!isNaN(montoTotal) || montoTotal != null || montoTotal !=" "){
+if(!isNaN(montoTotal) && montoTotal != null && montoTotal !=" "){
+alert("Tu compra es por un total de $" + montoTotal)
+break;
+}else{
+    alert ("Ingresá un monto válido")
+    montoTotal  =parseFloat(prompt("Indica el monto de tu compra"))
 }
-if ((donacion < 10000) || (donacion > 50)){
-    alert("Gracias! Donaste: $" + donacion + ", nos faltan: $" + (50000 - donacion) + " para llegar al objetivo.")
 }
+let cuotas =parseFloat(prompt("Indicá en cuantas cuotas deseas abonar, recordá que podés hacerlo en 1, 3, 6, 9 o 12."))
+function calcularInteres(cuotas) {
+    while (!isNaN(cuotas) || cuotas != null || cuotas !=" "){
+    if(cuotas == 1){
+        alert ("El precio final de tu compra es $" + montoTotal);
+        break;
+    }else if(cuotas == 3){
+        alert ("El precio final de tu compra es $" + (montoTotal * 1.15));
+        break;
+    }
+    else if (cuotas == 6){
+        alert ("El precio final de tu compra es $" + (montoTotal * 1.30));
+        break;
+    }
+    else if (cuotas== 9){
+        alert ("El precio final de tu compra es $" + (montoTotal * 1.45));
+        break;
+    }
+    else if (cuotas ==12){
+        alert ("El precio final de tu compra es $" + (montoTotal * 1.60));
+        break;
+    }
+    else{
+        cuotas =parseFloat(prompt("Número inválido. Indicá en cuantas cuotas deseas abonar, recordá que podés hacerlo en 1, 3, 6, 9 o 12."))
+    }
+    }
+}
+calcularInteres(cuotas);
