@@ -77,3 +77,36 @@ for (let i = 0; i < precios.length; i++) {
     sumaPrecios += precios[i];
 }
 alert("Tus productos son los siguientes:" + productosSeleccionados + ". Y tienen un costo de: $" + sumaPrecios);
+
+
+//pedimos número de cuotas
+let cuotas =parseFloat(prompt("Indicá en cuantas cuotas deseas abonar, recordá que podés hacerlo en 1, 3, 6, 9 o 12."))
+
+//definimos función para calcular el interés en las cuotas seleccionadas multiplicando el monto por el interés dependiendo la cantidad de cuotas
+function calcularInteres(cuotas) {
+    while (!isNaN(cuotas) || cuotas != null || cuotas !=" "){
+    if(cuotas == 1){
+        alert ("El precio final de tu compra es $" + sumaPrecios);
+        break;
+    }else if(cuotas == 3){
+        alert ("El precio final de tu compra es $" + (sumaPrecios * 1.15));
+        break;
+    }
+    else if (cuotas == 6){
+        alert ("El precio final de tu compra es $" + (sumaPrecios * 1.30));
+        break;
+    }
+    else if (cuotas== 9){
+        alert ("El precio final de tu compra es $" + (sumaPrecios * 1.45));
+        break;
+    }
+    else if (cuotas ==12){
+        alert ("El precio final de tu compra es $" + (sumaPrecios * 1.60));
+        break;
+    }
+    else{
+        cuotas =parseFloat(prompt("Número inválido. Indicá en cuantas cuotas deseas abonar, recordá que podés hacerlo en 1, 3, 6, 9 o 12."))
+    }
+    }
+}
+calcularInteres(cuotas);
