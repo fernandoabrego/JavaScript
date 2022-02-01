@@ -8,9 +8,9 @@ class Producto{
 }
 
 //nuevos productos
-const prod1 = new Producto (" Acolchado + almohadas", 5100, true);
-const prod2 = new Producto (" Cambiador reversible", 4100, false);
-const prod3 = new Producto (" Juego de cuna", 10900, true);
+const prod1 = new Producto ("Acolchado + almohadas", 5100, true);
+const prod2 = new Producto ("Cambiador reversible", 4100, false);
+const prod3 = new Producto ("Juego de cuna", 10900, true);
 
 //array con nuestros productos
 const productos =[prod1, prod2, prod3];
@@ -64,7 +64,7 @@ while((!isNaN(seleccionProductos) || seleccionProductos != null || seleccionProd
         quitarProductos(productosSeleccionados);
         seleccionProductos=parseFloat(prompt("Ingresá el número indicado para agregar productos al carrito:\n 1) Acolchado + almohadas $5100\n 2) Cambiador reversible $4100\n 3) Juego de cuna $10900\n 4)Para borrar el último producto agregado al carrito\n 5)SALIR"))
     }else if (seleccionProductos== 5){
-        alert("Carrito finalizado.")
+        alert("Carrito finalizado. Seleccionaste" + productosSeleccionados.join(", "))
     break;
     }else{
         alert ("El producto seleccionado no es válido. Por favor, reintentalo nuevamente")
@@ -76,7 +76,6 @@ while((!isNaN(seleccionProductos) || seleccionProductos != null || seleccionProd
 for (let i = 0; i < precios.length; i++) {
     sumaPrecios += precios[i];
 }
-alert("Tus productos son los siguientes:" + productosSeleccionados + ". Y tienen un costo de: $" + sumaPrecios);
 
 
 //pedimos número de cuotas
