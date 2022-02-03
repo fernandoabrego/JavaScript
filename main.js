@@ -11,8 +11,11 @@ class Producto{
 const prod1 = new Producto ("Acolchado + almohadas", 5100, true);
 const prod2 = new Producto ("Cambiador reversible", 4100, false);
 const prod3 = new Producto ("Juego de cuna", 10900, true);
-
-
+// const productos = [
+//     {nombre: 'Acolchado + almohadas', precio: 5100, esCombo: true},
+//     {nombre: 'Cambiador reversible', precio: 4100, esCombo: false},
+//     {nombre: 'Juego de cuna', precio: 10900, esCombo: true},
+// ]
 //array con nuestros productos
 const productos =[prod1, prod2, prod3];
 
@@ -35,6 +38,11 @@ const precios = [] ;
 function agregarPrecios(producto) {
     precios.push(producto)
 }
+
+//filtro de combos
+const combos = productos.filter((el) => el.esCombo == true)
+console.log("Mirá nuestros combos",combos);
+
 
 //pedimos que seleccionen los productos ofrecidos en los distintos números
 let seleccionProductos = parseFloat(prompt("Ingresá el número indicado para agregar productos al carrito. Recordá que con tu compra mayor a $10000 tenés envío gratis.\n 1) Acolchado + almohadas $5100\n 2) Cambiador reversible $4100\n 3) Juego de cuna $10900\n 4)Para borrar el último producto agregado al carrito\n 5)SALIR"));
@@ -116,6 +124,7 @@ function calcularInteres(cuotas) {
     }
     }
 }
+
 //por ultimo calculamos el interés y chequeamos si tiene envío gratis.
 calcularInteres(cuotas);
 envioGratis(sumaPrecios);
