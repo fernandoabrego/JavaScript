@@ -12,11 +12,12 @@ const prod1 = new Producto ("Acolchado + almohadas", 5100, true);
 const prod2 = new Producto ("Cambiador reversible", 4100, false);
 const prod3 = new Producto ("Juego de cuna", 10900, true);
 
+
 //array con nuestros productos
 const productos =[prod1, prod2, prod3];
 
 //array vacío que va a contener los productos seleccionados por el cliente
-let productosSeleccionados = [];
+const productosSeleccionados = [];
 
 //pusheamos los productos seleccionados por el cliente al array de seleccionados que se encuentra vacío
 function ingresarProductos(producto) {
@@ -28,17 +29,15 @@ function quitarProductos(producto) {
     productosSeleccionados.pop(producto)
 }
 //array vacío, va a contener los precios de los productos que agregue el cliente, para posteriormente ser sumados.
-let precios = [] ;
+const precios = [] ;
 
 //agregamos los precios al array vacío
 function agregarPrecios(producto) {
     precios.push(producto)
 }
-//este va a ser el precio total de productos que nuestro cliente agregue. Igualamos a 0 para luego sumar correctamente
-let sumaPrecios = 0;
 
 //pedimos que seleccionen los productos ofrecidos en los distintos números
-let seleccionProductos = parseFloat(prompt("Ingresá el número indicado para agregar productos al carrito:\n 1) Acolchado + almohadas $5100\n 2) Cambiador reversible $4100\n 3) Juego de cuna $10900\n 4)Para borrar el último producto agregado al carrito\n 5)SALIR"));
+let seleccionProductos = parseFloat(prompt("Ingresá el número indicado para agregar productos al carrito. Recordá que con tu compra mayor a $10000 tenés envío gratis.\n 1) Acolchado + almohadas $5100\n 2) Cambiador reversible $4100\n 3) Juego de cuna $10900\n 4)Para borrar el último producto agregado al carrito\n 5)SALIR"));
 
 
 while((!isNaN(seleccionProductos) || seleccionProductos != null || seleccionProductos !=" ")){
@@ -64,7 +63,7 @@ while((!isNaN(seleccionProductos) || seleccionProductos != null || seleccionProd
         quitarProductos(productosSeleccionados);
         seleccionProductos=parseFloat(prompt("Ingresá el número indicado para agregar productos al carrito:\n 1) Acolchado + almohadas $5100\n 2) Cambiador reversible $4100\n 3) Juego de cuna $10900\n 4)Para borrar el último producto agregado al carrito\n 5)SALIR"))
     }else if (seleccionProductos== 5){
-        alert("Carrito finalizado. Seleccionaste" + productosSeleccionados.join(", "))
+        //alert("Carrito finalizado. Seleccionaste: " + productosSeleccionados.join(", ") + " y el precio es de: $")
     break;
     }else{
         alert ("El producto seleccionado no es válido. Por favor, reintentalo nuevamente")
@@ -72,35 +71,44 @@ while((!isNaN(seleccionProductos) || seleccionProductos != null || seleccionProd
     }
 }
 
-//iteramos para obtener la suma total
-for (let i = 0; i < precios.length; i++) {
-    sumaPrecios += precios[i];
-}
+//usamos reduce para sumar el monto total de los productos que nuestro cliente agregue al array precios
+let sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0)
+alert ("Carrito finalizado. Seleccionaste: " + productosSeleccionados.join(", ") + " y el precio es de: $" + sumaPrecios)
 
 
 //pedimos número de cuotas
 let cuotas =parseFloat(prompt("Indicá en cuantas cuotas deseas abonar, recordá que podés hacerlo en 1, 3, 6, 9 o 12."))
 
+//funcion para envío gratis
+function envioGratis(q) {
+    if (q >= 10000){
+        alert ("¡Felicitaciones, tenés envío gratis!")
+    }else{
+    alert ("El costo de envío es de $350")
+    }
+}
+
+
 //definimos función para calcular el interés en las cuotas seleccionadas multiplicando el monto por el interés dependiendo la cantidad de cuotas
 function calcularInteres(cuotas) {
     while (!isNaN(cuotas) || cuotas != null || cuotas !=" "){
     if(cuotas == 1){
-        alert ("El precio final de tu compra es $" + sumaPrecios);
+        alert ("El precio final de tu compra es: $" + sumaPrecios);
         break;
     }else if(cuotas == 3){
-        alert ("El precio final de tu compra es $" + (sumaPrecios * 1.15));
+        alert ("El precio final de tu compra es: $" + (Math.ceil(sumaPrecios * 1.15)));
         break;
     }
     else if (cuotas == 6){
-        alert ("El precio final de tu compra es $" + (sumaPrecios * 1.30));
+        alert ("El precio final de tu compra es: $" + (Math.ceil(sumaPrecios * 1.30)));
         break;
     }
     else if (cuotas== 9){
-        alert ("El precio final de tu compra es $" + (sumaPrecios * 1.45));
+        alert ("El precio final de tu compra es: $" + (Math.ceil(sumaPrecios * 1.45)));
         break;
     }
     else if (cuotas ==12){
-        alert ("El precio final de tu compra es $" + (sumaPrecios * 1.60));
+        alert ("El precio final de tu compra es: $" + (Math.ceil(sumaPrecios * 1.60)));
         break;
     }
     else{
@@ -108,4 +116,6 @@ function calcularInteres(cuotas) {
     }
     }
 }
+//por ultimo calculamos el interés y chequeamos si tiene envío gratis.
 calcularInteres(cuotas);
+envioGratis(sumaPrecios);
