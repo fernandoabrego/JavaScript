@@ -41,7 +41,7 @@ function agregarPrecios(producto) {
 
 //filtro de combos
 const combos = productos.filter((el) => el.esCombo == true)
-console.log("Mirá nuestros combos",combos);
+console.log("Mirá nuestros combos", combos);
 
 
 //pedimos que seleccionen los productos ofrecidos en los distintos números
@@ -50,29 +50,7 @@ let seleccionProductos = parseFloat(prompt("Ingresá el número indicado para ag
 const contenedorProductos = document.querySelector(".productos");
 const carrito = document.querySelector(".carrito");
 
-//con for each definimos la funcion para mostrar las entradas por el prompt
-function mostrarCarrito(productosSeleccionados) {
-    carrito.innerHTML = " ";
-    productosSeleccionados.forEach(function (product) {
-        //div
-        const divCarrito = document.createElement("div");
-        divCarrito.classList.add("tarjetaProducto");
-        //titulo
-        const tituloProducto = document.createElement("h2");
-        tituloProducto.classList.add("tituloProducto");
-        tituloProducto.innerText = product.nombre;
-        //img
-        const imgProducto = document.createElement("img");
-        imgProducto.classList.add("imagenes");
-        imgProducto.src = product.img;
-        
-        //agregamos
-        divCarrito.appendChild(tituloProducto);
-        divCarrito.appendChild(imgProducto);
-        
-        carrito.appendChild(divCarrito);
-    })
-}
+
 //mostramos productos
 mostrarProductos();
 while((!isNaN(seleccionProductos) || seleccionProductos != null || seleccionProductos !=" ")){
@@ -134,6 +112,7 @@ alert ("Carrito finalizado. Seleccionaste: " + productosSeleccionados.join(", ")
 //pedimos número de cuotas
 let cuotas =parseFloat(prompt("Indicá en cuantas cuotas deseas abonar, recordá que podés hacerlo en 1, 3, 6, 9 o 12."))
 
+
 //definimos función para calcular el interés en las cuotas seleccionadas multiplicando el monto por el interés dependiendo la cantidad de cuotas
 function calcularInteres(cuotas) {
     while (!isNaN(cuotas) || cuotas != null || cuotas !=" "){
@@ -162,6 +141,32 @@ function calcularInteres(cuotas) {
     }
 }
 
+mostrarCarrito(productosSeleccionados);
+
+//con for each definimos la funcion para mostrar las entradas por el prompt
+function mostrarCarrito(productosSeleccionados) {
+    carrito.innerHTML = " ";
+    
+    productosSeleccionados.forEach(function (product) {
+        //div
+        const divProductos = document.createElement("div");
+        divProductos.classList.add("tarjetaProducto");
+        //titulo
+        const tituloProducto = document.createElement("h2");
+        tituloProducto.classList.add("tituloProducto");
+        tituloProducto.innerText = product.nombre;
+        //img
+        const imgProducto = document.createElement("img");
+        imgProducto.classList.add("imagenes");
+        imgProducto.src = product.img;
+        
+        //agregamos
+        divProductos.appendChild(tituloProducto);
+        divProductos.appendChild(imgProducto);
+        
+        carrito.appendChild(divProductos);
+    })
+}
 //funcion para envío gratis
 function envioGratis(q) {
     if (q >= 10000){
@@ -173,4 +178,3 @@ function envioGratis(q) {
 //por ultimo calculamos el interés, chequeamos si tiene envío gratis y mostramos el carrito (entradas por prompt)
 calcularInteres(cuotas);
 envioGratis(sumaPrecios);
-mostrarCarrito(productosSeleccionados);
