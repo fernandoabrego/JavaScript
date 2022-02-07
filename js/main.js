@@ -8,9 +8,9 @@ class Producto{
     }
 }
 //nuevos productos
-const prod1 = new Producto ("Acolchado + almohadas", "../images/acolchados-y-almohadas.jpg", 5100, true);
-const prod2 = new Producto ("Cambiador reversible", "../images/cambiador.jpg", 4100, false);
-const prod3 = new Producto ("Juego de cuna", "../images/juego-de-cuna.jpg", 10900, true);
+const prod1 = new Producto ("Acolchado + almohadas", "./images/acolchados-y-almohadas.jpg", 5100, true);
+const prod2 = new Producto ("Cambiador reversible", "./images/cambiador.jpg", 4100, false);
+const prod3 = new Producto ("Juego de cuna", "./images/juego-de-cuna.jpg", 10900, true);
 // const productos = [
 //     {nombre: 'Acolchado + almohadas', precio: 5100, esCombo: true},
 //     {nombre: 'Cambiador reversible', precio: 4100, esCombo: false},
