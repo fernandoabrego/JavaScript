@@ -1,16 +1,18 @@
 //creamos constructor
 class Producto{
-    constructor (nombre, precio, esCombo){
+    constructor (nombre, img, precio, esCombo){
         this.nombre = nombre;
+        this.img = img;
         this.precio = parseFloat(precio);
         this.esCombo = esCombo;
+
     }
 }
 
 //nuevos productos
-const prod1 = new Producto ("Acolchado + almohadas", 5100, true);
-const prod2 = new Producto ("Cambiador reversible", 4100, false);
-const prod3 = new Producto ("Juego de cuna", 10900, true);
+const prod1 = new Producto ("Acolchado + almohadas", "../images/acolchados-y-almohadas.jpg", 5100, true);
+const prod2 = new Producto ("Cambiador reversible", "../images/cambiador.jpg", 4100, false);
+const prod3 = new Producto ("Juego de cuna", "../images/juego-de-cuna.jpg", 10900, true);
 // const productos = [
 //     {nombre: 'Acolchado + almohadas', precio: 5100, esCombo: true},
 //     {nombre: 'Cambiador reversible', precio: 4100, esCombo: false},
@@ -47,7 +49,30 @@ console.log("Mirá nuestros combos",combos);
 //pedimos que seleccionen los productos ofrecidos en los distintos números
 let seleccionProductos = parseFloat(prompt("Ingresá el número indicado para agregar productos al carrito. Recordá que con tu compra mayor a $10000 tenés envío gratis.\n 1) Acolchado + almohadas $5100\n 2) Cambiador reversible $4100\n 3) Juego de cuna $10900\n 4)Para borrar el último producto agregado al carrito\n 5)SALIR"));
 
+const contenedorProductos = document.querySelector(".productos");
+const carrito = document.querySelector(".carrito");
 
+function mostrarProductos() {
+    productos.forEach(function (product) {
+        const divProductos = document.createElement("div");
+        divProductos.classList.add("tarjetaProducto");
+
+        const imgProducto = document.createElement("img");
+        imgProducto.classList.add("imagenes")
+        imgProducto.src = product.img;
+
+        const tituloProducto = document.createElement("h2");
+        tituloProducto.textContent = product.nombre;
+    
+        divProductos.appendChild(tituloProducto);
+        divProductos.appendChild(imgProducto);
+        
+        contenedorProductos.appendChild(divProductos);
+    })
+
+}
+
+mostrarProductos();
 while((!isNaN(seleccionProductos) || seleccionProductos != null || seleccionProductos !=" ")){
     //ingresamos los productos seleccionados por el cliente al array y luego sumamos el precio del mismo a su array correspondiente.
     if(seleccionProductos == 1){
@@ -83,19 +108,8 @@ while((!isNaN(seleccionProductos) || seleccionProductos != null || seleccionProd
 let sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0)
 alert ("Carrito finalizado. Seleccionaste: " + productosSeleccionados.join(", ") + " y el precio es de: $" + sumaPrecios)
 
-
 //pedimos número de cuotas
 let cuotas =parseFloat(prompt("Indicá en cuantas cuotas deseas abonar, recordá que podés hacerlo en 1, 3, 6, 9 o 12."))
-
-//funcion para envío gratis
-function envioGratis(q) {
-    if (q >= 10000){
-        alert ("¡Felicitaciones, tenés envío gratis!")
-    }else{
-    alert ("El costo de envío es de $350")
-    }
-}
-
 
 //definimos función para calcular el interés en las cuotas seleccionadas multiplicando el monto por el interés dependiendo la cantidad de cuotas
 function calcularInteres(cuotas) {
@@ -124,7 +138,55 @@ function calcularInteres(cuotas) {
     }
     }
 }
+//con for of
+/* function mostrarCarrito(){
+    carrito.innerHTML = " ";
+for (const elem of productosSeleccionados) {
+    const divProductos = document.createElement("div");
+    divProductos.classList.add("tarjetaProducto");
+    
+    const imgProducto = document.createElement("img");
+    imgProducto.classList.add("imagenes")
+    imgProducto.src = elem.img;
 
+    const tituloProducto = document.createElement("h2");
+    tituloProducto.innerText = elem.nombre;
+
+    divProductos.appendChild(tituloProducto);
+    divProductos.appendChild(imgProducto);
+    
+    carrito.appendChild(divProductos);
+}
+} */
+//con for each
+function mostrarCarrito(productosSeleccionados) {
+    carrito.innerHTML = " ";
+    productosSeleccionados.forEach(function (product) {
+        const divProductos = document.createElement("div");
+        divProductos.classList.add("tarjetaProducto");
+        
+        const imgProducto = document.createElement("img");
+        imgProducto.classList.add("imagenes")
+        imgProducto.src = product.img;
+
+        const tituloProducto = document.createElement("h2");
+        tituloProducto.innerHTML = productosSeleccionados.nombre;
+    
+        divProductos.appendChild(tituloProducto);
+        divProductos.appendChild(imgProducto);
+        
+        carrito.appendChild(divProductos);
+    })
+}
+//funcion para envío gratis
+function envioGratis(q) {
+    if (q >= 10000){
+        alert ("¡Felicitaciones, tenés envío gratis!")
+    }else{
+    alert ("El costo de envío es de $350")
+    }
+}
 //por ultimo calculamos el interés y chequeamos si tiene envío gratis.
 calcularInteres(cuotas);
 envioGratis(sumaPrecios);
+mostrarCarrito(productosSeleccionados);
