@@ -50,26 +50,6 @@ let seleccionProductos = parseFloat(prompt("Ingresá el número indicado para ag
 const contenedorProductos = document.querySelector(".productos");
 const carrito = document.querySelector(".carrito");
 
-//definimos funcion para mostrar productos
-function mostrarProductos() {
-    productos.forEach(function (product) {
-        const divProductos = document.createElement("div");
-        divProductos.classList.add("tarjetaProducto");
-
-        const imgProducto = document.createElement("img");
-        imgProducto.classList.add("imagenes")
-        imgProducto.src = product.img;
-
-        const tituloProducto = document.createElement("h2");
-        tituloProducto.textContent = product.nombre;
-    
-        divProductos.appendChild(tituloProducto);
-        divProductos.appendChild(imgProducto);
-        
-        contenedorProductos.appendChild(divProductos);
-    })
-
-}
 //con for each definimos la funcion para mostrar las entradas por el prompt
 function mostrarCarrito(productosSeleccionados) {
     carrito.innerHTML = " ";
@@ -124,6 +104,27 @@ while((!isNaN(seleccionProductos) || seleccionProductos != null || seleccionProd
         alert ("El producto seleccionado no es válido. Por favor, reintentalo nuevamente")
     seleccionProductos=parseFloat(prompt("Ingresá el número indicado para agregar productos al carrito:\n 1) Acolchado + almohadas $5100\n 2) Cambiador reversible $4100\n 3) Juego de cuna $10900\n 4)Para borrar el último producto agregado al carrito\n 5)SALIR"))
     }
+}
+
+//definimos funcion para mostrar productos
+function mostrarProductos() {
+    productos.forEach(function (product) {
+        const divProductos = document.createElement("div");
+        divProductos.classList.add("tarjetaProducto");
+
+        const imgProducto = document.createElement("img");
+        imgProducto.classList.add("imagenes")
+        imgProducto.src = product.img;
+
+        const tituloProducto = document.createElement("h2");
+        tituloProducto.textContent = product.nombre;
+    
+        divProductos.appendChild(tituloProducto);
+        divProductos.appendChild(imgProducto);
+        
+        contenedorProductos.appendChild(divProductos);
+    })
+
 }
 
 //usamos reduce para sumar el monto total de los productos que nuestro cliente agregue al array precios
