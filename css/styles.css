@@ -17,30 +17,64 @@ h1{
 .productos{
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: center;
+    padding-bottom: 20px;
 }
 h2{
     text-align: center;
 }
 .tarjetaProducto{
     border: 4px solid lightcoral;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    text-align: start;
 }
 .imagenes{
+    margin-bottom: 3vh;
     height: 300px;
     width: 300px;
-    border: 3px solid gray;
+    margin: 20px;
+    border: 5px solid white;
+    border-radius: 8px;
+}
+.carrito{
+    font-size: 5vh;
+    border: 8px solid lightcoral;
 }
 .precio{
     text-align: center;
-    color: lightcoral;
-    height: 50px;
     font-size: 3.5vw;
-    border: gray;
 }
 .envioGratis{
     font-size: 3vw;
     text-align: center;
     color:lightcoral;
     border: 4px solid lightblue;
+}
+.botonera{
+    display: flex;
+    justify-content: space-around;
+    align-self: end;
+}
+.preciosProductos{
+    height: fit-content;
+    font-size: 2vw;
+    border: 2px solid black;
+    text-align: center;
+}
+.cuotas{
+    height: fit-content;
+    border: 4px solid lightcoral;
+
+}
+.formCuotas{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+div input{
+    background-color: lightcoral;
+    border: 3px solid white ;
+    border-radius: 8px;
+    height: fit-content;
 }
