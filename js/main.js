@@ -1,45 +1,74 @@
-//constructor
-class Producto {
-    constructor(nombre, imagen, precio, esCombo){
-        this.nombre = nombre;
-        this.imagen = imagen;
-        this.precio = precio;
-        this.esCombo = esCombo;
+const productos =[
+    {
+    id: 1,
+    nombre:"Acolchado + almohadas",
+    imagen: "../images/acolchados-y-almohadas.jpg",
+    precio: 5100,
+    esCombo: true,
+    },
+    {
+    id: 2,
+    nombre:"Cambiador reversible",
+    imagen: "../images/cambiador.jpg",
+    precio: 4100,
+    esCombo: false,
+    },
+    {
+    id: 3,
+    nombre:"Juego de cuna",
+    imagen: "../images/juego-de-cuna.jpg",
+    precio: 10900,
+    esCombo: true,
     }
-}
+]
 
-//creamos productos
-const producto1 = new Producto ('Acolchado + almohadas', '../images/acolchados-y-almohadas.jpg', 5100, true)
-const producto2 = new Producto ('Cambiador reversible', '../images/cambiador.jpg', 4100, false)
-const producto3 = new Producto ('Juego de cuna', '../images/juego-de-cuna.jpg', 10900, true)
+//array vacío que va a contener exclusivamente los nombres de los productos agregados por el cliente para mostrarlos
+const nombresSeleccionados = []
 
-//array con nuestros productos
-const productos = [producto1, producto2, producto3]
-
-//array vacío que va a contener los productos seleccionados por el cliente
-const productosSeleccionados =[] ;
+////array vacío que va a contener los productos agregados por el cliente
+const productosSeleccionados = [];
 
 //array vacío, va a contener los precios de los productos que agregue el cliente, para posteriormente ser sumados.
-const precios =[];
+const precios =[]
 
-//pusheamos los productos seleccionados por el cliente al array de seleccionados que se encuentra vacío
-function ingresarProductos(producto) {
+//pusheamos los nombres de los productos seleccionados por el cliente al array de nombres (vacío)
+function ingresarNombres(producto) {
+    nombresSeleccionados.push(producto);
+}
+//agregamos pop para quitar el nombre del último producto en caso que así se requiera
+function quitarNombres(producto) {
+    nombresSeleccionados.pop(producto)
+}
+
+//ingresamos producto al array de seleccionados
+function ingresarProducto(producto){
     productosSeleccionados.push(producto);
 }
-
-//agregamos pop para quitar el último producto en caso que así se requiera
-function quitarProductos(producto) {
-    productosSeleccionados.pop(producto)
+//quitamos producto del array de seleccionados
+function quitarProducto(producto){
+    productosSeleccionados.pop(producto);
 }
 
-//agregamos los precios al array vacío
+//agregamos los precios al array de precios
 function agregarPrecios(producto) {
     precios.push(producto)
 }
-
 //quitamos los precios de ser necesario
 function quitarPrecios(producto){
     precios.pop(producto)
+}
+
+//Agregamos al carrito
+function agregarAlCarrito(nombre){
+    const agregados = productos.find ( producto => producto.nombre === nombre);
+    ingresarProducto(agregados);
+    mostrarCarrito(productosSeleccionados);
+}
+//Quitamos del carrito
+function quitarDelCarrito(nombre){
+    const agregados = productos.find ( product => product.nombre === nombre);
+    quitarProducto(agregados);
+    mostrarCarrito(productosSeleccionados);
 }
 
 //contenedores
@@ -47,17 +76,8 @@ const contenedorProductos = document.querySelector(".productos");
 const carrito = document.querySelector(".carrito");
 const preciosFinales = document.querySelector(".precioFinal");
 const envios = document.querySelector(".shipping");
-
-//botones para agregar/quitar al carrito
-const boton1 = document.querySelector(".boton1");
-const botonBorrar1= document.querySelector(".botonBorrar1");
-const boton2 = document.querySelector(".boton2");
-const botonBorrar2= document.querySelector(".botonBorrar2");
-const boton3 = document.querySelector(".boton3");
-const botonBorrar3= document.querySelector(".botonBorrar3");
 const precioCarrito= document.querySelector(".precioCarrito");
 const preciosProductos = document.querySelector(".preciosProductos")
-
 //Botones para cuotas
 const cuot =document.querySelector(".cuotas");
 const cuota1 = document.querySelector(".cuota1");
@@ -66,9 +86,11 @@ const cuota6 = document.querySelector(".cuota6");
 const cuota9 = document.querySelector(".cuota9");
 const cuota12 = document.querySelector(".cuota12");
 
+
 //definimos funcion para mostrar productos
-function mostrarProductos() {
+    function mostrarProductos() {
     productos.forEach(function (product) {
+        //Creamos tarjeta con imagenes y texto
         const divProductos = document.createElement("div");
         divProductos.classList.add("tarjetaProducto");
 
@@ -82,193 +104,108 @@ function mostrarProductos() {
         const precioProducto =document.createElement("h2");
         precioProducto.textContent = "$" + product.precio;
 
+        //Creamos botones 
+        const botonAgregar = document.createElement("button");
+        botonAgregar.classList.add("botones");
+        botonAgregar.textContent = "Agregar al carrito";
+
+        //Agregamos con click
+        botonAgregar.addEventListener("click", () =>{
+            ingresarNombres(product.nombre);
+            agregarAlCarrito(product.nombre);
+            agregarPrecios(product.precio);
+            })
+
+        const botonQuitar = document.createElement("button");
+        botonQuitar.classList.add("botones")
+        botonQuitar.textContent = "Quitar último";
+        
+        //Quitamos último con click
+        botonQuitar.addEventListener("click", () =>{
+            quitarNombres(product.nombre);
+            quitarDelCarrito(product.nombre);
+            quitarPrecios(product.precio);
+        })
+        eventosBotones(botonAgregar);
+        eventosBotones(botonQuitar);
+        //apendamos lo anterior
         divProductos.appendChild(tituloProducto);
         divProductos.appendChild(precioProducto);
         divProductos.appendChild(imgProducto);
+        divProductos.appendChild(botonAgregar);
+        divProductos.appendChild(botonQuitar);
 
         contenedorProductos.appendChild(divProductos);
     })
+    }
 
+    function mostrarCarrito(elementos){
+        carrito.innerHTML= "";
+        elementos.forEach(function (elementos) {
+            const divProductos = document.createElement("div");
+            divProductos.classList.add("tarjetaCarrito");
+    
+            const imgProducto = document.createElement("img");
+            imgProducto.classList.add("imagenes")
+            imgProducto.src = elementos.imagen;
+    
+            const tituloProducto = document.createElement("h2");
+            tituloProducto.textContent = elementos.nombre;
+    
+            const precioProducto =document.createElement("h2");
+            precioProducto.textContent = ". $" + elementos.precio;
+
+/*             const borrarDelCarrito =document.createElement("button");
+            borrarDelCarrito.classList.add("eliminarDelCarrito"); */ //Más adelante en el proyecto, la idea es quitar desde el botón
+
+            divProductos.appendChild(imgProducto);
+            divProductos.appendChild(tituloProducto);
+            divProductos.appendChild(precioProducto);
+
+            carrito.appendChild(divProductos);
+    })
+    //guardar Local Storage en string
+    localStorage.setItem("carrito",JSON.stringify(productosSeleccionados))
+}
+//Eventos para mouse
+    function eventosBotones(button){
+    button.addEventListener("mouseenter", () =>{
+    button.style.background = "white";
+});
+
+    button.addEventListener("mouseleave", ()=>{
+    button.style.background = "lightcoral";
+});
+
+    button.addEventListener("mousedown", ()=>{
+    button.style.background = "lightcoral"
+});
+
+    button.addEventListener("mouseup", ()=>{
+    button.style.background = "white"
+});
 }
 
 //mostramos productos
 mostrarProductos();
 
-      //quitando/agregando del carrito, estilos de los botones, etc
-        boton1.addEventListener("mouseenter", () =>{
-            boton1.style.background = "white";
-        });
-
-        boton1.addEventListener("mouseleave", ()=>{
-            boton1.style.background = "lightcoral";
-        });
-
-        boton1.addEventListener("mousedown", ()=>{
-            boton1.style.background = "lightcoral"
-        });
-
-        boton1.addEventListener("mouseup", ()=>{
-            boton1.style.background = "white"
-        });
-        
-        boton1.addEventListener("click", ()=>{
-            if (carrito.textContent != "Quitaste el producto. Podés volver a agregar o finalizar la compra."){
-            ingresarProductos(productos[0].nombre)
-            agregarPrecios(productos[0].precio)   
-            const divBtn = document.createElement("div");
-            divBtn.classList.add("tarjetaProducto");
-            divBtn.textContent += ` ${productos[0].nombre} $${productos[0].precio}`;
-            carrito.append(divBtn);
-        }else{
-            carrito.textContent =`Seleccionaste: ${productosSeleccionados.join(", ")}. Sus precios son: $${precios.join(", ")}`;
-            const divBtn = document.createElement("div");
-            divBtn.classList.add("tarjetaProducto");
-            ingresarProductos(productos[0].nombre);
-            agregarPrecios(productos[0].precio);
-            divBtn.textContent += ` ${productos[0].nombre} $${productos[0].precio}`;
-            carrito.append(divBtn);
-        }}
-        )
-
-        //quitando/agregando del carrito, estilos de los botones, etc
-        botonBorrar1.addEventListener("mouseenter", () =>{
-            botonBorrar1.style.background = "white";
-        });
-        botonBorrar1.addEventListener("mouseleave", ()=>{
-            botonBorrar1.style.background = "lightcoral";
-        });
-        botonBorrar1.addEventListener("mousedown", ()=>{
-            botonBorrar1.style.background = "lightcoral"
-        });
-        botonBorrar1.addEventListener("mouseup", ()=>{
-            botonBorrar1.style.background = "white"
-        });
-        botonBorrar1.addEventListener("click", ()=>{
-            const divBtn = document.createElement("div");
-            divBtn.classList.add("tarjetaProducto");
-            carrito.textContent = "Quitaste el producto. Podés volver a agregar o finalizar la compra.";
-            quitarProductos(productos[0].nombre);
-            quitarPrecios(productos[0].precio)
-        })
-        
-
-      //quitando/agregando del carrito, estilos de los botones, etc
-        boton2.addEventListener("mouseenter", () =>{
-            boton2.style.background = "white";
-        });
-        boton2.addEventListener("mouseleave", ()=>{
-            boton2.style.background = "lightcoral";
-        });
-        boton2.addEventListener("mousedown", ()=>{
-            boton2.style.background = "lightcoral"
-        });
-        boton2.addEventListener("mouseup", ()=>{
-            boton2.style.background = "white"
-        });
-        boton2.addEventListener("click", ()=>{
-            if (carrito.textContent != "Quitaste el producto. Podés volver a agregar o finalizar la compra."){
-            ingresarProductos(productos[1].nombre);
-            agregarPrecios(productos[1].precio);
-            const divBtn = document.createElement("div");
-            divBtn.classList.add("tarjetaProducto");
-            divBtn.textContent += ` ${productos[1].nombre} $${productos[1].precio}`;
-            carrito.append(divBtn);
-        }else{
-            carrito.textContent =`Seleccionaste: ${productosSeleccionados.join(", ")} $${precios .join(", ")}`;
-            const divBtn = document.createElement("div");
-            divBtn.classList.add("tarjetaProducto");
-            ingresarProductos(productos[1].nombre)
-            agregarPrecios(productos[1].precio)
-            divBtn.textContent += ` ${productos[1].nombre} $${productos[1].precio}`;
-            carrito.append(divBtn);
-        }})
-      //quitando/agregando del carrito, estilos de los botones, etc
-        botonBorrar2.addEventListener("mouseenter", () =>{
-            botonBorrar2.style.background = "white";
-        });
-        botonBorrar2.addEventListener("mouseleave", ()=>{
-            botonBorrar2.style.background = "lightcoral";
-        });
-        botonBorrar2.addEventListener("mousedown", ()=>{
-            botonBorrar2.style.background = "lightcoral"
-        });
-        botonBorrar2.addEventListener("mouseup", ()=>{
-            botonBorrar2.style.background = "white"
-        });
-        botonBorrar2.addEventListener("click", ()=>{
-            const divBtn = document.createElement("div");
-            divBtn.classList.add("tarjetaProducto");
-            carrito.textContent = "Quitaste el producto. Podés volver a agregar o finalizar la compra.";
-            quitarProductos(productos[1].nombre);
-            quitarPrecios(productos[1].precio)
-        })
-
-      //quitando/agregando del carrito, estilos de los botones, etc
-        boton3.addEventListener("mouseenter", () =>{
-            boton3.style.background = "white";
-        });
-        boton3.addEventListener("mouseleave", ()=>{
-            boton3.style.background = "lightcoral";
-        });
-        boton3.addEventListener("mousedown", ()=>{
-            boton3.style.background = "lightcoral"
-        });
-        boton3.addEventListener("mouseup", ()=>{
-            boton3.style.background = "white"
-        });
-        boton3.addEventListener("click", ()=>{
-            if (carrito.textContent != "Quitaste el producto. Podés volver a agregar o finalizar la compra."){
-            ingresarProductos(productos[2].nombre)
-            agregarPrecios(productos[2].precio)
-            const divBtn = document.createElement("div");
-            divBtn.classList.add("tarjetaProducto");
-            divBtn.textContent += ` ${productos[2].nombre} $${productos[2].precio}`;
-            carrito.append(divBtn);
-        }else{
-            carrito.textContent =`Seleccionaste: ${productosSeleccionados.join(", ")} $${precios.join(", ")}`;
-            const divBtn = document.createElement("div");
-            divBtn.classList.add("tarjetaProducto");
-            ingresarProductos(productos[2].nombre) 
-            agregarPrecios(productos[2].precio)
-            divBtn.textContent += ` ${productos[2].nombre} $${productos[2].precio}`;
-            carrito.append(divBtn);
-        }})
-
-      //quitando/agregando del carrito, estilos de los botones, etc
-        botonBorrar3.addEventListener("mouseenter", () =>{
-            botonBorrar3.style.background = "white";
-        });
-        botonBorrar3.addEventListener("mouseleave", ()=>{
-            botonBorrar3.style.background = "lightcoral";
-        });
-        botonBorrar3.addEventListener("mousedown", ()=>{
-            botonBorrar3.style.background = "lightcoral"
-        });
-        botonBorrar3.addEventListener("mouseup", ()=>{
-            botonBorrar3.style.background = "white"
-        });
-        botonBorrar3.addEventListener("click", ()=>{
-            const divBtn = document.createElement("div");
-            divBtn.classList.add("tarjetaProducto");
-            carrito.textContent = "Quitaste el producto. Podés volver a agregar o finalizar la compra.";
-            quitarProductos(productos[2].nombre)
-            quitarPrecios(productos[2].precio)
-        })
-
-
-let sumaPrecios; //varible GLOBAL, luego, la utilizamos localmente para facilitar las funciones
 let divPreciosProductos = document.createElement("div");
 divPreciosProductos.classList.add("preciosProductos")
-    precioCarrito.addEventListener("click", ()=>{
-            divPreciosProductos.innerHTML =  "";
-            preciosProductos.append(divPreciosProductos);
-            let sumaPrecios;
-            //usamos reduce LOCAL para sumar el monto total de los productos que nuestro cliente agregue al array precios
-            sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0) 
-            divPreciosProductos.textContent = "Carrito finalizado. Seleccionaste: " + productosSeleccionados.join(", ") + " y el precio es de: $" + sumaPrecios;
-        }
-    )
+//calculamos carrito ya integrando la función de envío gratis.
+function calcularCarrito(){
+    divPreciosProductos.innerHTML =  "";
+    preciosProductos.append(divPreciosProductos);
+    let sumaPrecios; //varible GLOBAL, luego, la utilizamos localmente para facilitar las funciones
+    //usamos reduce LOCAL para sumar el monto total de los productos que nuestro cliente agregue al array precios
+    sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0)
+    divPreciosProductos.textContent = "Carrito finalizado. Tus productos son: " +nombresSeleccionados.join(", ")+"." + " Por un precio de: $" + sumaPrecios;
+    envioGratis(sumaPrecios);
 
+}
+//Al clickear, calculamos carrito y envío.
+precioCarrito.addEventListener("click", ()=>{
+    calcularCarrito();
+})
 
     //usamos reduce LOCAL para sumar el monto total de los productos que nuestro cliente agregue al array precios y agregamos la funcion para calcular interés
     cuota1.addEventListener("click", ()=>{
@@ -276,36 +213,43 @@ divPreciosProductos.classList.add("preciosProductos")
         sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0);
         if(sumaPrecios !=0){
         calcularInteres(1);
+        envioGratis(sumaPrecios);
         }})
     cuota3.addEventListener("click", ()=>{
         let sumaPrecios;
         sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0);
         if(sumaPrecios !=0){
-    calcularInteres(3);
+        calcularInteres(3);
+        envioGratis(sumaPrecios);
+
     }})
     cuota6.addEventListener("click", ()=>{
         let sumaPrecios;
         sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0);
         if(sumaPrecios !=0){
         calcularInteres(6);
+        envioGratis(sumaPrecios);
         }})
     cuota6.addEventListener("click", ()=>{
         let sumaPrecios;
         sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0);
         if(sumaPrecios !=0){
         calcularInteres(6);
+        envioGratis(sumaPrecios);
         }})
     cuota9.addEventListener("click", ()=>{
         let sumaPrecios;
         sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0);
         if(sumaPrecios !=0){
         calcularInteres(9);
+        envioGratis(sumaPrecios);
         }})
     cuota12.addEventListener("click", ()=>{
         let sumaPrecios;
         sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0);
         if(sumaPrecios !=0 || divCuotas ==""){
         calcularInteres(12);
+        envioGratis(sumaPrecios);
         }})
 
 //definimos función para calcular el interés en las cuotas seleccionadas multiplicando el monto por el interés dependiendo la cantidad de cuotas
@@ -317,7 +261,6 @@ function calcularInteres(cuotas) {
     sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0);
     if(cuotas == 1 && cuot.innerHTML== ""){
         precioFinal.innerHTML = ("El precio final de tu compra es: $" + sumaPrecios);
-        console.log(precioFinal.innerHTML);
         cuot.append(precioFinal);
     }else if(cuotas == 3 && cuot.innerHTML== ""){
         precioFinal.innerText = ("El precio final de tu compra es: $" + (Math.ceil(sumaPrecios * 1.15)));
@@ -337,3 +280,30 @@ function calcularInteres(cuotas) {
     }
     else{}
     }
+
+//funcion para envío gratis
+function envioGratis(q) {
+    envios.innerHTML ="";
+    const freeShip = document.createElement("div");
+    freeShip.classList.add("envioGratis");
+    if (q >= 10000){
+        freeShip.innerText= "¡Felicitaciones, tenés envío gratis!";
+    }else{
+        freeShip.innerText= "El costo de envío es de $350";
+    }
+    envios.appendChild(freeShip);
+} 
+
+//recuperamos el Local parseado con JSON 
+    function recuperarLocal(){
+        let traerLocal = JSON.parse(localStorage.getItem("carrito"))
+        if (traerLocal){
+            traerLocal.forEach(element => {
+            agregarAlCarrito(element.nombre)
+            agregarPrecios(element.precio)
+            calcularCarrito();
+        })
+    }
+    console.log(traerLocal);
+    }
+    recuperarLocal();
