@@ -198,13 +198,13 @@ function calcularCarrito(){
     let sumaPrecios; //varible GLOBAL, luego, la utilizamos localmente para facilitar las funciones
     //usamos reduce LOCAL para sumar el monto total de los productos que nuestro cliente agregue al array precios
     sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0)
-    divPreciosProductos.textContent = "Carrito finalizado. Tus productos son: " +nombresSeleccionados.join(", ")+"." + " Por un precio de: $" + sumaPrecios;
+    divPreciosProductos.textContent = "Carrito finalizado. Tus productos son: " + nombresSeleccionados.join(", ") + "." + " Por un precio de: $" + sumaPrecios;
     envioGratis(sumaPrecios);
-
 }
 //Al clickear, calculamos carrito y envío.
 precioCarrito.addEventListener("click", ()=>{
     calcularCarrito();
+    localStorage.setItem("carrito",JSON.stringify(productosSeleccionados))
 })
 
     //usamos reduce LOCAL para sumar el monto total de los productos que nuestro cliente agregue al array precios y agregamos la funcion para calcular interés
@@ -301,6 +301,7 @@ function envioGratis(q) {
             traerLocal.forEach(element => {
             agregarAlCarrito(element.nombre)
             agregarPrecios(element.precio)
+            ingresarNombres(element.nombre);
             calcularCarrito();
         })
     }
