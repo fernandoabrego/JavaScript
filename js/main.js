@@ -31,6 +31,21 @@ const productosSeleccionados = [];
 //array vacío, va a contener los precios de los productos que agregue el cliente, para posteriormente ser sumados.
 const precios =[]
 
+//contenedores
+const contenedorProductos = document.querySelector(".productos");
+const carrito = document.querySelector(".carrito");
+const preciosFinales = document.querySelector(".precioFinal");
+const envios = document.querySelector(".shipping");
+const precioCarrito= document.querySelector(".precioCarrito");
+const preciosProductos = document.querySelector(".preciosProductos")
+//Botones para cuotas
+const cuot =document.querySelector(".cuotas");
+const cuota1 = document.querySelector(".cuota1");
+const cuota3 = document.querySelector(".cuota3");
+const cuota6 = document.querySelector(".cuota6");
+const cuota9 = document.querySelector(".cuota9");
+const cuota12 = document.querySelector(".cuota12");
+
 //pusheamos los nombres de los productos seleccionados por el cliente al array de nombres (vacío)
 function ingresarNombres(producto) {
     nombresSeleccionados.push(producto);
@@ -48,6 +63,10 @@ function ingresarProducto(producto){
 function quitarProducto(producto){
     productosSeleccionados.pop(producto);
 }
+
+//des precios
+const [a, b, c] = productos
+console.log(a.precio, b.precio, c.precio);
 
 //agregamos los precios al array de precios
 function agregarPrecios(producto) {
@@ -70,21 +89,6 @@ function quitarDelCarrito(nombre){
     quitarProducto(agregados);
     mostrarCarrito(productosSeleccionados);
 }
-
-//contenedores
-const contenedorProductos = document.querySelector(".productos");
-const carrito = document.querySelector(".carrito");
-const preciosFinales = document.querySelector(".precioFinal");
-const envios = document.querySelector(".shipping");
-const precioCarrito= document.querySelector(".precioCarrito");
-const preciosProductos = document.querySelector(".preciosProductos")
-//Botones para cuotas
-const cuot =document.querySelector(".cuotas");
-const cuota1 = document.querySelector(".cuota1");
-const cuota3 = document.querySelector(".cuota3");
-const cuota6 = document.querySelector(".cuota6");
-const cuota9 = document.querySelector(".cuota9");
-const cuota12 = document.querySelector(".cuota12");
 
 
 //definimos funcion para mostrar productos
@@ -186,6 +190,7 @@ const cuota12 = document.querySelector(".cuota12");
 });
 }
 
+
 //mostramos productos
 mostrarProductos();
 
@@ -198,8 +203,7 @@ function calcularCarrito(){
     let sumaPrecios; //varible GLOBAL, luego, la utilizamos localmente para facilitar las funciones
     //usamos reduce LOCAL para sumar el monto total de los productos que nuestro cliente agregue al array precios
     sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0)
-    divPreciosProductos.textContent = "Carrito finalizado. Tus productos son: " + nombresSeleccionados.join(", ") + "." + " Por un precio de: $" + sumaPrecios;
-    envioGratis(sumaPrecios);
+    sumaPrecios != 0 ? (divPreciosProductos.textContent = "Carrito finalizado. Tus productos son: " +[...nombresSeleccionados].join(", ") + "." + " Por un precio de: $" + sumaPrecios, envioGratis(sumaPrecios)) : (divPreciosProductos.textContent = "Tu carrito está vacío", envioGratis(sumaPrecios));
 }
 //Al clickear, calculamos carrito y envío.
 precioCarrito.addEventListener("click", ()=>{
@@ -211,46 +215,29 @@ precioCarrito.addEventListener("click", ()=>{
     cuota1.addEventListener("click", ()=>{
         let sumaPrecios;
         sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0);
-        if(sumaPrecios !=0){
-        calcularInteres(1);
-        envioGratis(sumaPrecios);
-        }})
+        sumaPrecios!=0 && calcularInteres(1), envioGratis(sumaPrecios), calcularCarrito();
+        })
     cuota3.addEventListener("click", ()=>{
         let sumaPrecios;
         sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0);
-        if(sumaPrecios !=0){
-        calcularInteres(3);
-        envioGratis(sumaPrecios);
-
-    }})
+        sumaPrecios!=0 && calcularInteres(3), envioGratis(sumaPrecios), calcularCarrito();
+        })
     cuota6.addEventListener("click", ()=>{
         let sumaPrecios;
         sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0);
-        if(sumaPrecios !=0){
-        calcularInteres(6);
-        envioGratis(sumaPrecios);
-        }})
-    cuota6.addEventListener("click", ()=>{
-        let sumaPrecios;
-        sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0);
-        if(sumaPrecios !=0){
-        calcularInteres(6);
-        envioGratis(sumaPrecios);
-        }})
+        sumaPrecios !=0 &&
+        calcularInteres(6), envioGratis(sumaPrecios), calcularCarrito();
+        })
     cuota9.addEventListener("click", ()=>{
         let sumaPrecios;
         sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0);
-        if(sumaPrecios !=0){
-        calcularInteres(9);
-        envioGratis(sumaPrecios);
-        }})
+        sumaPrecios !=0 && calcularInteres(9), envioGratis(sumaPrecios), calcularCarrito();
+        })
     cuota12.addEventListener("click", ()=>{
         let sumaPrecios;
         sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0);
-        if(sumaPrecios !=0 || divCuotas ==""){
-        calcularInteres(12);
-        envioGratis(sumaPrecios);
-        }})
+        sumaPrecios !=0 && calcularInteres(12), envioGratis(sumaPrecios), calcularCarrito();
+        })
 
 //definimos función para calcular el interés en las cuotas seleccionadas multiplicando el monto por el interés dependiendo la cantidad de cuotas
 function calcularInteres(cuotas) {
@@ -259,52 +246,31 @@ function calcularInteres(cuotas) {
     cuot.innerHTML = "";
     let sumaPrecios;
     sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0);
-    if(cuotas == 1 && cuot.innerHTML== ""){
-        precioFinal.innerHTML = ("El precio final de tu compra es: $" + sumaPrecios);
-        cuot.append(precioFinal);
-    }else if(cuotas == 3 && cuot.innerHTML== ""){
-        precioFinal.innerText = ("El precio final de tu compra es: $" + (Math.ceil(sumaPrecios * 1.15)));
-        cuot.append(precioFinal);
-    }
-    else if (cuotas == 6 && cuot.innerHTML== ""){
-        precioFinal.innerText = ("El precio final de tu compra es: $" + (Math.ceil(sumaPrecios * 1.30)));
-        cuot.append(precioFinal);
-    }
-    else if (cuotas== 9 && cuot.innerHTML== ""){
-        precioFinal.innerText = ("El precio final de tu compra es: $" + (Math.ceil(sumaPrecios * 1.45)));
-        cuot.append(precioFinal);
-    }
-    else if (cuotas ==12 && cuot.innerHTML== ""){
-        precioFinal.innerText = ("El precio final de tu compra es: $" + (Math.ceil(sumaPrecios * 1.60)));
-        cuot.append(precioFinal);
-    }
-    else{}
-    }
+    cuotas == 1 && ((precioFinal.innerHTML = "El precio final de tu compra es: $" + sumaPrecios), cuot.append(precioFinal));
+    cuotas == 3 && ((precioFinal.innerHTML = "El precio final de tu compra es: $" + (Math.ceil(sumaPrecios * 1.15))), cuot.append(precioFinal));
+    cuotas == 6 && ((precioFinal.innerHTML = "El precio final de tu compra es: $" + (Math.ceil(sumaPrecios * 1.30))), cuot.append(precioFinal));
+    cuotas == 9 && ((precioFinal.innerHTML = "El precio final de tu compra es: $" + (Math.ceil(sumaPrecios * 1.45))), cuot.append(precioFinal));
+    cuotas == 12 && ((precioFinal.innerHTML = "El precio final de tu compra es: $" + (Math.ceil(sumaPrecios * 1.60))), cuot.append(precioFinal));}
 
 //funcion para envío gratis
 function envioGratis(q) {
     envios.innerHTML ="";
     const freeShip = document.createElement("div");
     freeShip.classList.add("envioGratis");
-    if (q >= 10000){
-        freeShip.innerText= "¡Felicitaciones, tenés envío gratis!";
-    }else{
-        freeShip.innerText= "El costo de envío es de $350";
-    }
+    q >= 10000 ? freeShip.innerText= "¡Felicitaciones, tenés envío gratis!" : freeShip.innerText= "El costo de envío es de $350";
+    q == 0 && (freeShip.innerText = "Debés seleccionar al menos un articulo");
     envios.appendChild(freeShip);
 } 
 
 //recuperamos el Local parseado con JSON 
     function recuperarLocal(){
         let traerLocal = JSON.parse(localStorage.getItem("carrito"))
-        if (traerLocal){
-            traerLocal.forEach(element => {
+        traerLocal && traerLocal.forEach(element => {
             agregarAlCarrito(element.nombre)
             agregarPrecios(element.precio)
             ingresarNombres(element.nombre);
             calcularCarrito();
         })
-    }
     console.log(traerLocal);
     }
     recuperarLocal();
