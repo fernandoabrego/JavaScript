@@ -96,3 +96,7 @@ h2{
     height: 20px;
     width: 20px;
 }
+.swal-footer{
+    text-align: center;
+    background-color: lightcoral;
+}

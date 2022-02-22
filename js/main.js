@@ -118,6 +118,11 @@ function quitarDelCarrito(nombre){
             ingresarNombres(product.nombre);
             agregarAlCarrito(product.nombre);
             agregarPrecios(product.precio);
+            Toastify({
+                text: "Agregaste: " + product.nombre,
+                duration: 2000
+            }).showToast();
+        
             })
 
         const botonQuitar = document.createElement("button");
@@ -129,6 +134,16 @@ function quitarDelCarrito(nombre){
             quitarNombres(product.nombre);
             quitarDelCarrito(product.nombre);
             quitarPrecios(product.precio);
+            productosSeleccionados.length !=0 ?
+            Toastify({
+                text: "Quitaste el último artículo.",
+                duration: 2000
+            }).showToast() :
+            Toastify({
+                text: "No tenés articulos en el carrito",
+                duration: 2000
+            }).showToast();
+        
         })
         eventosBotones(botonAgregar);
         eventosBotones(botonQuitar);
@@ -200,7 +215,7 @@ divPreciosProductos.classList.add("preciosProductos")
 function calcularCarrito(){
     divPreciosProductos.innerHTML =  "";
     preciosProductos.append(divPreciosProductos);
-    let sumaPrecios; //varible GLOBAL, luego, la utilizamos localmente para facilitar las funciones
+    let sumaPrecios;
     //usamos reduce LOCAL para sumar el monto total de los productos que nuestro cliente agregue al array precios
     sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0)
     sumaPrecios != 0 ? (divPreciosProductos.textContent = "Carrito finalizado. Tus productos son: " +[...nombresSeleccionados].join(", ") + "." + " Por un precio de: $" + sumaPrecios, envioGratis(sumaPrecios)) : (divPreciosProductos.textContent = "Tu carrito está vacío", envioGratis(sumaPrecios));
@@ -208,35 +223,50 @@ function calcularCarrito(){
 //Al clickear, calculamos carrito y envío.
 precioCarrito.addEventListener("click", ()=>{
     calcularCarrito();
-    localStorage.setItem("carrito",JSON.stringify(productosSeleccionados))
+    let sumaPrecios; 
+    //usamos reduce LOCAL para sumar el monto total de los productos que nuestro cliente agregue al array precios
+    sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0)
+    //Agregamos sweetalert correspondiente, con productos/vacío
+    sumaPrecios != 0 ? 
+        swal({
+        title: "Carrito finalizado",
+        text: "Tus productos son: " + [...nombresSeleccionados].join(", ") + "." + " Por un precio de: $" + sumaPrecios,
+        icon: "success",
+    }) :
+        alertCarrito(sumaPrecios);
+        localStorage.setItem("carrito",JSON.stringify(productosSeleccionados))
 })
 
     //usamos reduce LOCAL para sumar el monto total de los productos que nuestro cliente agregue al array precios y agregamos la funcion para calcular interés
     cuota1.addEventListener("click", ()=>{
         let sumaPrecios;
         sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0);
-        sumaPrecios!=0 && calcularInteres(1), envioGratis(sumaPrecios), calcularCarrito();
+        sumaPrecios!=0 ? (calcularInteres(1), envioGratis(sumaPrecios), calcularCarrito()) 
+        : alertCarrito(sumaPrecios);
         })
     cuota3.addEventListener("click", ()=>{
         let sumaPrecios;
         sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0);
-        sumaPrecios!=0 && calcularInteres(3), envioGratis(sumaPrecios), calcularCarrito();
+        sumaPrecios!=0 ? (calcularInteres(3), envioGratis(sumaPrecios), calcularCarrito())
+        : alertCarrito(sumaPrecios);
         })
     cuota6.addEventListener("click", ()=>{
         let sumaPrecios;
         sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0);
-        sumaPrecios !=0 &&
-        calcularInteres(6), envioGratis(sumaPrecios), calcularCarrito();
+        sumaPrecios !=0 ? (calcularInteres(6), envioGratis(sumaPrecios), calcularCarrito())
+        : alertCarrito(sumaPrecios);
         })
     cuota9.addEventListener("click", ()=>{
         let sumaPrecios;
         sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0);
-        sumaPrecios !=0 && calcularInteres(9), envioGratis(sumaPrecios), calcularCarrito();
+        sumaPrecios !=0 ? (calcularInteres(9), envioGratis(sumaPrecios), calcularCarrito())
+        : alertCarrito(sumaPrecios);
         })
     cuota12.addEventListener("click", ()=>{
         let sumaPrecios;
         sumaPrecios = precios.reduce((acumulador, elemento) => acumulador + elemento, 0);
-        sumaPrecios !=0 && calcularInteres(12), envioGratis(sumaPrecios), calcularCarrito();
+        sumaPrecios !=0 ? (calcularInteres(12), envioGratis(sumaPrecios), calcularCarrito())
+        : alertCarrito(sumaPrecios);
         })
 
 //definimos función para calcular el interés en las cuotas seleccionadas multiplicando el monto por el interés dependiendo la cantidad de cuotas
@@ -274,3 +304,17 @@ function envioGratis(q) {
     console.log(traerLocal);
     }
     recuperarLocal();
+
+    //funcion para alert con carrito vacío/con productos
+    function alertCarrito(item){
+    item != 0 ? 
+        swal({
+        title: "Carrito finalizado",
+        text: "Tus productos son: " + [...nombresSeleccionados].join(", ") + "." + " Por un precio de: $" + sumaPrecios,
+        icon: "success",
+    }) :
+        swal({
+        title: "Tu carrito está vacío. ",
+        text: "Debés seleccionar al menos un producto",
+        icon: "error",
+    }) }
