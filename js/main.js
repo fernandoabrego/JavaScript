@@ -1,4 +1,4 @@
-const productos =[
+const productos = [
     {
     id: 1,
     nombre:"Acolchado + almohadas",
@@ -46,6 +46,20 @@ const cuota6 = document.querySelector(".cuota6");
 const cuota9 = document.querySelector(".cuota9");
 const cuota12 = document.querySelector(".cuota12");
 
+
+async function pedirP(){
+    let fetchProd = await fetch("../json/prod.json")
+    let data = await fetchProd.json()
+    console.log(data);
+    productos.forEach(dat => {
+        console.log("Precios: $"+dat.precio);
+    })
+}
+
+//pintamos nuestra BD
+pedirP();
+
+
 //pusheamos los nombres de los productos seleccionados por el cliente al array de nombres (vacío)
 function ingresarNombres(producto) {
     nombresSeleccionados.push(producto);
@@ -63,10 +77,6 @@ function ingresarProducto(producto){
 function quitarProducto(producto){
     productosSeleccionados.pop(producto);
 }
-
-//des precios
-const [a, b, c] = productos
-console.log(a.precio, b.precio, c.precio);
 
 //agregamos los precios al array de precios
 function agregarPrecios(producto) {
@@ -318,3 +328,6 @@ function envioGratis(q) {
         text: "Debés seleccionar al menos un producto",
         icon: "error",
     }) }
+
+
+

@@ -1,0 +1,23 @@
+[
+    {
+    "id": 1,
+    "nombre":"Acolchado + almohadas",
+    "imagen": "../images/acolchados-y-almohadas.jpg",
+    "precio": 5100,
+    "esCombo": true
+    },
+    {
+    "id": 2,
+    "nombre":"Cambiador reversible",
+    "imagen": "../images/cambiador.jpg",
+    "precio": 4100,
+    "esCombo": false
+    },
+    {
+    "id": 3,
+    "nombre":"Juego de cuna",
+    "imagen": "../images/juego-de-cuna.jpg",
+    "precio": 10900,
+    "esCombo": true
+    }
+]
