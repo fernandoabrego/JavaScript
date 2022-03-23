@@ -184,9 +184,6 @@ function quitarDelCarrito(nombre){
             const precioProducto =document.createElement("h2");
             precioProducto.textContent = ". $" + elementos.precio;
 
-/*             const borrarDelCarrito =document.createElement("button");
-            borrarDelCarrito.classList.add("eliminarDelCarrito"); */ //Más adelante en el proyecto, la idea es quitar desde el botón
-
             divProductos.appendChild(imgProducto);
             divProductos.appendChild(tituloProducto);
             divProductos.appendChild(precioProducto);
